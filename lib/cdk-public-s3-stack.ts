@@ -14,6 +14,13 @@ export class CdkPublicS3Stack extends cdk.Stack {
       websiteErrorDocument: 'error.html',
       publicReadAccess: true, // 公開アクセスを有効化
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS, // 必要に応じて調整
+      cors: [
+        {
+          allowedOrigins: ['*'],
+          allowedMethods: [s3.HttpMethods.GET],
+          allowedHeaders: ['*'],
+        },
+      ],
     });
 
     // バケットポリシーを追加してすべてのオブジェクトへの公開アクセスを許可
