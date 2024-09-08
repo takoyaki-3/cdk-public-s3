@@ -14,16 +14,17 @@ export class CdkPublicS3Stack extends cdk.Stack {
       websiteErrorDocument: 'error.html',
       publicReadAccess: true, // 公開アクセスを有効化
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS, // 必要に応じて調整
-      cors: [
-        {
-          allowedOrigins: ['*'],
-          allowedMethods: [s3.HttpMethods.GET],
-          allowedHeaders: ['*'],
-        },
-      ],
     });
 
-    // バケットポリシーを追加してすべてのオブジェクトへの公開アクセスを許可
+    /
+
+    // CORS設定の追加
+    bucket.addCorsRule({
+      allowedOrigins: ['*'], // すべてのオリジンを許可
+      allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD], // GET, HEADメソッドを許可
+      allowedHeaders: ['*'], // すべてのヘッダーを許可
+      maxAge: 30, // オプション、ブラウザのCORS結果キャッシュ期間（秒）
+    });/ バケットポリシーを追加してすべてのオブジェクトへの公開アクセスを許可
     bucket.addToResourcePolicy(new iam.PolicyStatement({
       actions: ['s3:GetObject'],
       resources: [`${bucket.bucketArn}/*`],
